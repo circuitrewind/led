@@ -3,7 +3,20 @@
 
 
 
+
 #include "../color/color.h"
+#include "interrupt.h"
+
+
+
+
+enum {
+	LED_RGB,
+	LED_GRB,
+	LED_WRGB,
+	LED_WGRB,
+};
+
 
 
 
@@ -12,12 +25,14 @@ class led {
 
 
 
+
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR - PASS IN THE PIN FOR THE LEDS, AS WELL AS THE LED COUNT
 	////////////////////////////////////////////////////////////////////////////
-	INLINE led(uint8_t led_pin, uint16_t led_total) {
+	INLINE led(uint8_t led_pin, uint16_t led_total, uint8_t led_mode=LED_GRB) {
 		this->_pin		= led_pin;
 		this->_total	= led_total;
+		this->_mode		= led_mode;
 	}
 
 
@@ -74,7 +89,7 @@ class led {
 	// INITIAL SETUP OF THE LED STRIP - CALL AT BEGINNING OF RENDER LOOP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void begin() {
-		noInterrupts();
+		intr_disable();
 		pinMode(this->_pin, OUTPUT);
 	}
 
@@ -86,7 +101,7 @@ class led {
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void end() {
 		digitalWrite(this->_pin, LOW);
-		interrupts();
+		intr_enable();
 		delay(1);	//TODO: git rid of this last delay!
 	}
 
@@ -113,10 +128,33 @@ class led {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE CURRENT LED STRIP MODE: RGB VS GRB DATA ORDER
+	////////////////////////////////////////////////////////////////////////////
+	INLINE uint8_t mode() const {
+		return this->_mode;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// SET THE CURRENT LED STRIP MODE: RGB VS GRB DATA ORDER
+	////////////////////////////////////////////////////////////////////////////
+	INLINE uint8_t mode(uint8_t led_mode) {
+		this->_mode = led_mode;
+	}
+
+
+
+
 	private:
 		uint8_t		_pin;
+		uint8_t		_mode;
 		uint16_t	_total;
 };
+
+
 
 
 #endif //__led_h__
