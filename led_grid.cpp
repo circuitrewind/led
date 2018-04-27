@@ -64,7 +64,7 @@ void led_grid::show() {
 
 
 
-void led_grid::draw(int8_t x, int8_t y) {
+void led_grid::draw(int16_t x, int16_t y) {
 	int16_t pos = index(x, y);
 	if (pos == -1) return;
 
@@ -118,7 +118,7 @@ void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset) {
 
 		uint8_t index = ((*text > 0x7E) ? 0x7F : *text) - 0x21;
 
-		#ifdef __AVR__
+		#if defined(ESP8266) || defined(ESP32) || __AVR__
 			led_character item = PROGMEM_getAnything(&led_font[index]);
 		#else
 			led_character item = led_font[index];
@@ -155,7 +155,7 @@ void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset, col
 
 		uint8_t index = ((*text > 0x7E) ? 0x7F : *text) - 0x21;
 
-		#ifdef ARDUINO_AVR_NANO
+		#if defined(ESP8266) || defined(ESP32) || __AVR__
 			led_character item = PROGMEM_getAnything(&led_font[index]);
 		#else
 			led_character item = led_font[index];
@@ -193,7 +193,7 @@ int16_t led_grid::stringWidth(const char *_text) {
 
 		uint8_t index = ((*text > 0x7E) ? 0x7F : *text) - 0x21;
 
-		#ifdef ARDUINO_AVR_NANO
+		#if defined(ESP8266) || defined(ESP32) || __AVR__
 			led_character item = PROGMEM_getAnything(&led_font[index]);
 		#else
 			led_character item = led_font[index];

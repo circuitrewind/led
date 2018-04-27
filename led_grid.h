@@ -41,9 +41,18 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	//CONVERT X/Y GRID POSITION COORDINATE PAIR INTO A LED STRIP POSITION
 	////////////////////////////////////////////////////////////////////////////
-	INLINE int16_t index(int8_t x, int8_t y) const {
+	/*
+	INLINE int16_t index(int16_t x, int16_t y) const {
 		if (x < 0  ||  x >= width()  ||  y < 0  ||  y >= height()) return -1;
 		return (y * width()) + x;
+	}
+	*/
+	INLINE int16_t index(int16_t x, int16_t y) const {
+		if (x < 0  ||  x >= width()  ||  y < 0  ||  y >= height()) return -1;
+
+		return (y & 0x01)
+			? ((y * width()) + ((width() - 1) - x))
+			: ((y * width()) + x);
 	}
 
 
@@ -53,7 +62,7 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	//WRITE A SINGLE PIXEL VALUE INTO THE LED GRID
 	////////////////////////////////////////////////////////////////////////////
-	INLINE void draw(int8_t x, int8_t y, color_t color) {
+	INLINE void draw(int16_t x, int16_t y, color_t color) {
 		write(index(x, y), color);
 	}
 
@@ -63,7 +72,7 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	//WRITE A SINGLE RAINBOW PIXEL VALUE INTO THE LED GRID
 	////////////////////////////////////////////////////////////////////////////
-	void draw(int8_t x, int8_t y);
+	void draw(int16_t x, int16_t y);
 
 
 
@@ -71,7 +80,7 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	//DRAW A SINGLE CHARACTER ONTO THE LED GRID
 	////////////////////////////////////////////////////////////////////////////
-	INLINE void symbol(uint8_t c, int8_t x, int8_t y, color_t color) {
+	INLINE void symbol(uint8_t c, int16_t x, int16_t y, color_t color) {
 		const char z[2] = {c, 0};
 		string(z, x, y, color);
 	}
