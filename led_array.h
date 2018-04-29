@@ -122,7 +122,7 @@ class led_array : public led {
 	//FADE THE BRIGHTNESS TO A DARKER LEVEL
 	////////////////////////////////////////////////////////////////////////////
 	void fade(uint8_t amount = 0x80) {
-		if (amount == 0x00) fade = 0x80;
+		if (amount == 0x00) amount = 0x80;
 
 		for (int16_t i=0; i<total(); i++) {
 			color_t read = read_unsafe(i);
