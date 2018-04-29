@@ -119,6 +119,29 @@ class led_array : public led {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//FADE THE BRIGHTNESS TO A DARKER LEVEL
+	////////////////////////////////////////////////////////////////////////////
+	void fade(uint8_t amount = 0x80) {
+		for (int16_t i=0; i<total(); i++) {
+			color_t read = read_unsafe(i);
+			color_t write;
+
+			for (uint8_t x=0; x<8; x++) {
+				if (amount & (0x80 >> x)) {
+					write.r += (read.r >> x);
+					write.g += (read.g >> x);
+					write.b += (read.b >> x);
+				}
+			}
+
+			write_unsafe(i, write);
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//GET A POINTER TO THE RAW BINARY PIXEL DATA
 	////////////////////////////////////////////////////////////////////////////
 	INLINE color_t *pixels() const {
