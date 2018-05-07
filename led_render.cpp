@@ -51,6 +51,7 @@ void ICACHE_RAM_ATTR led_render::render() {
 	for (uint16_t x=0; x<total; x++) {
 		count = max(count, list[x]->total());
 		value |= (1 << list[x]->pin());
+		pinMode(list[x], OUTPUT);
 	}
 
 
