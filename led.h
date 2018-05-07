@@ -10,11 +10,18 @@
 
 
 
-enum {
+enum LED_COLOR {
 	LED_RGB,
 	LED_GRB,
 	LED_WRGB,
 	LED_WGRB,
+};
+
+
+enum LED_TYPE {
+	LED_BASIC,
+	LED_ARRAY,
+	LED_GRID,
 };
 
 
@@ -33,6 +40,7 @@ class led {
 		this->_pin		= led_pin;
 		this->_total	= led_total;
 		this->_mode		= led_mode;
+		this->_type		= LED_BASIC;
 	}
 
 
@@ -148,10 +156,23 @@ class led {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE CURRENT LED RENDERING TYPE
+	////////////////////////////////////////////////////////////////////////////
+	INLINE LED_TYPE type() {
+		return this->_type;
+	}
+
+
+
+
 	private:
 		uint8_t		_pin;
 		uint8_t		_mode;
 		uint16_t	_total;
+
+	protected:
+		LED_TYPE	_type;
 };
 
 

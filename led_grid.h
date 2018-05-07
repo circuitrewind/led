@@ -22,6 +22,8 @@ public:
 			grid_width( led_width),
 			grid_height(led_height) {
 
+		_type	= LED_GRID;
+
 		grid	= led_buffer
 				? led_buffer
 				: (color_t*) malloc(total() * sizeof(color_t));

@@ -18,7 +18,8 @@ class led_array : public led {
 	////////////////////////////////////////////////////////////////////////////
 	INLINE led_array(uint8_t led_pin, uint16_t led_total, uint8_t led_mode=LED_GRB)
 		: led(led_pin, led_total, led_mode) {
-		_array = (color_t*) malloc(sizeof(color_t) * led_total);
+		_array	= (color_t*) malloc(sizeof(color_t) * led_total);
+		_type	= LED_ARRAY;
 	}
 
 
