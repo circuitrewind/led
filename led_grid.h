@@ -17,7 +17,7 @@
 
 class led_grid : public led_array {
 public:
-	led_grid(uint8_t led_pin, uint16_t led_width, uint16_t led_height, color_t *led_buffer=NULL)
+	led_grid(uint8_t led_pin, uint16_t led_width, uint16_t led_height, color_t *led_buffer=nullptr)
 		:	led_array(led_pin, led_width*led_height),
 			grid_width( led_width),
 			grid_height(led_height) {
