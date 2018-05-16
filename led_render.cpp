@@ -37,7 +37,7 @@ static INLINE ICACHE_RAM_ATTR uint32_t esp_cycle() {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// SEND A FULL PIXEL TO THE LED STRIP
+// RENDER ALL OF THE ARRAYS AND GRIDS WITHIN A SINGLE PASS
 ////////////////////////////////////////////////////////////////////////////////
 void ICACHE_RAM_ATTR led_render::render() {
 	intr_disable();
@@ -46,9 +46,10 @@ void ICACHE_RAM_ATTR led_render::render() {
 	uint16_t	count	= 0;
 	uint32_t	value	= 0;
 	uint32_t	low		= 0;
-	uint32_t	data[total];
+	uint32_t	data[LED_RENDER_TOTAL];
 
-	for (uint16_t x=0; x<total; x++) {
+	for (uint16_t x=0; x<LED_RENDER_TOTAL; x++) {
+		if (!list[x]) continue;
 		count = max(count, list[x]->total());
 		value |= (1 << list[x]->pin());
 		pinMode(list[x]->pin(), OUTPUT);
@@ -56,7 +57,9 @@ void ICACHE_RAM_ATTR led_render::render() {
 
 
 	for (uint16_t i=0; i<count; i++) {
-		for (uint16_t x=0; x<total; x++) {
+		for (uint16_t x=0; x<LED_RENDER_TOTAL; x++) {
+			if (!list[x]) continue;
+
 			color_t color = list[x]->read(i);
 
 			data[x] = (list[x]->mode() == LED_RGB)
@@ -67,7 +70,9 @@ void ICACHE_RAM_ATTR led_render::render() {
 		for (int32_t bit=23; bit>=0; bit--) {
 			//CALCULATE WHICH CHANNELS SHOULD GO LOW
 			low = 0;
-			for (uint16_t x=0; x<total; x++) {
+			for (uint16_t x=0; x<LED_RENDER_TOTAL; x++) {
+				if (!list[x]) continue;
+
 				if (!(data[x] & (1 << bit))) {
 					low |= (1 << list[x]->pin());
 				}
@@ -94,9 +99,6 @@ void ICACHE_RAM_ATTR led_render::render() {
 	}
 
 	intr_enable();
-
-	//TODO: THIS IS VERY TERRIBAD!!
-	delay(1);
 }
 
 
