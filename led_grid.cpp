@@ -107,6 +107,7 @@ void led_grid::draw(int16_t x, int16_t y) {
 
 void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset) {
 	const uint8_t *text = (const uint8_t *) _text;
+	if (!text) return;
 
 	while (*text) {
 
@@ -144,6 +145,7 @@ void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset) {
 
 void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset, color_t color) {
 	const uint8_t *text = (const uint8_t *) _text;
+	if (!text) return;
 
 	while (*text) {
 
@@ -181,6 +183,7 @@ void led_grid::string(const char *_text, int16_t x_offset, int16_t y_offset, col
 
 int16_t led_grid::stringWidth(const char *_text) {
 	const uint8_t *text = (const uint8_t *) _text;
+	if (!text) return 0;
 
 	int16_t x_offset = 0;
 	while (*text) {
@@ -294,6 +297,3 @@ void led_grid::increment() {
 
 	}
 }
-
-
-//#endif //TEENSYDUINO || ARDUINO_AVR_NANO
