@@ -157,9 +157,9 @@ class led_array : public led {
 
 			for (uint8_t x=0; x<8; x++) {
 				if (amount & (0x80 >> x)) {
-					write.r += (read.r >> x);
-					write.g += (read.g >> x);
-					write.b += (read.b >> x);
+					write.r += (read.r >> (x+1));
+					write.g += (read.g >> (x+1));
+					write.b += (read.b >> (x+1));
 				}
 			}
 
