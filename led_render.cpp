@@ -48,10 +48,17 @@ void ICACHE_RAM_ATTR led_render::render() {
 	uint32_t	low		= 0;
 	uint32_t	data[LED_RENDER_TOTAL];
 
+
+	//FIND THE MAXIMUM NUMBER OF LEDS TO RENDER
+	//ALSO, RESET EACH LED ARRAY'S INTERNAL POINTER
 	for (uint16_t x=0; x<LED_RENDER_TOTAL; x++) {
 		if (!list[x]) continue;
+
+		list[x]->rewind();
+
 		count = max(count, list[x]->total());
 		value |= (1 << list[x]->pin());
+
 		pinMode(list[x]->pin(), OUTPUT);
 	}
 
@@ -60,12 +67,13 @@ void ICACHE_RAM_ATTR led_render::render() {
 		for (uint16_t x=0; x<LED_RENDER_TOTAL; x++) {
 			if (!list[x]) continue;
 
-			color_t color = list[x]->read(i);
+			color_t color = list[x]->next();
 
 			data[x] = (list[x]->mode() == LED_RGB)
 				? ((uint32_t)color)
 				: (color.grb());
 		}
+
 
 		for (int32_t bit=23; bit>=0; bit--) {
 			//CALCULATE WHICH CHANNELS SHOULD GO LOW
@@ -78,15 +86,16 @@ void ICACHE_RAM_ATTR led_render::render() {
 				}
 			}
 
-			//WRITE HIGH VALUE TO ALL CHANNELS
+			//WRITE HIGH VALUE TO **ALL** CHANNELS
 			start = esp_cycle();
 			GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, value);
 
-			//PAUSE UNTIL TIME TO GO LOW, THEN WRITE THE VALUE
+			//PAUSE UNTIL TIME TO GO LOW, THEN WRITE THE LOW VALUE
+			//ONLY WRITE TO CHANNELS WITH A **0** BIT
 			while ((esp_cycle() - start) < CYCLES_T0H) {}
 			GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, low);
 
-			//PAUSE AND WRITE LOW VALUE TO ALL CHANNELS
+			//PAUSE AND WRITE LOW VALUE TO **ALL** CHANNELS
 			while ((esp_cycle() - start) < CYCLES_T1H) {}
 			GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, value);
 

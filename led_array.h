@@ -18,8 +18,9 @@ class led_array : public led {
 	////////////////////////////////////////////////////////////////////////////
 	INLINE led_array(uint8_t led_pin, uint16_t led_total, uint8_t led_mode=LED_GRB)
 		: led(led_pin, led_total, led_mode) {
-		_array	= (color_t*) malloc(sizeof(color_t) * led_total);
-		_type	= LED_ARRAY;
+		_array		= (color_t*) malloc(sizeof(color_t) * led_total);
+		_type		= LED_ARRAY;
+		_pointer	= 0;
 	}
 
 
@@ -38,17 +39,38 @@ class led_array : public led {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// REMIND THE INTERNAL READ POINTER BACK TO FIRST LED
+	////////////////////////////////////////////////////////////////////////////
+	INLINE void rewind() {
+		_pointer = 0;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// INCREMENT THE INTERNAL POINTER AND RETURN THE LED
+	////////////////////////////////////////////////////////////////////////////
+	virtual color_t next() {
+		return read(_pointer++);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//READ A SINGLE PIXEL FROM THE LED STRIP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE color_t read(int16_t index) const {
 		return (index >= 0  &&  index < total())
-				? _array[index]
-				: color_t::black();
+			? _array[index]
+			: color_t::black();
 	}
 
 	INLINE color_t read_unsafe(int16_t index) const {
 		return _array[index];
 	}
+
 
 
 
@@ -154,8 +176,9 @@ class led_array : public led {
 
 
 
-	private:
+	protected:
 		color_t *_array;
+		int16_t _pointer;
 };
 
 
