@@ -4,6 +4,7 @@
 
 
 #include "led.h"
+#include "optimize.h"
 
 
 
@@ -33,6 +34,7 @@ class led_array : public led {
 		clear();
 		show();
 		free(_array);
+		_array = nullptr;
 	}
 
 
@@ -41,7 +43,7 @@ class led_array : public led {
 	////////////////////////////////////////////////////////////////////////////
 	// REMIND THE INTERNAL READ POINTER BACK TO FIRST LED
 	////////////////////////////////////////////////////////////////////////////
-	INLINE void rewind() {
+	virtual void rewind() {
 		_pointer = 0;
 	}
 
@@ -62,7 +64,7 @@ class led_array : public led {
 	//READ A SINGLE PIXEL FROM THE LED STRIP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE color_t read(int16_t index) const {
-		return (index >= 0  &&  index < total())
+		return (likely(index >= 0  &&  index < total()))
 			? _array[index]
 			: color_t::black();
 	}
@@ -79,7 +81,9 @@ class led_array : public led {
 	//WRITE A SINGLE PIXEL VALUE INTO THE LED STRIP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void write(int16_t index, color_t color) {
-		if (index >=0  &&  index < total()) _array[index] = color;
+		if (likely(index >=0  &&  index < total())) {
+			_array[index] = color;
+		}
 	}
 
 	INLINE void write(int16_t index, uint8_t r, uint8_t g, uint8_t b) {

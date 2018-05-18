@@ -66,7 +66,7 @@ void led_grid::show() {
 
 void led_grid::draw(int16_t x, int16_t y) {
 	int16_t pos = index(x, y);
-	if (pos == -1) return;
+	if (unlikely(pos == -1)) return;
 
 	switch (color_anim) {
 		case PR_LEFT:
