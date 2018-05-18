@@ -17,16 +17,12 @@
 
 class led_grid : public led_array {
 public:
-	led_grid(uint8_t led_pin, uint16_t led_width, uint16_t led_height, color_t *led_buffer=nullptr)
+	led_grid(uint8_t led_pin, uint16_t led_width, uint16_t led_height)
 		:	led_array(led_pin, led_width*led_height),
 			grid_width( led_width),
 			grid_height(led_height) {
 
 		_type	= LED_GRID;
-
-		grid	= led_buffer
-				? led_buffer
-				: (color_t*) malloc(total() * sizeof(color_t));
 	}
 
 
@@ -119,7 +115,6 @@ public:
 protected:
 	const uint16_t	grid_width;
 	const uint16_t	grid_height;
-	color_t			*grid;
 
 	static uint8_t		color_offset;
 	static LED_RAINBOW	color_anim;
