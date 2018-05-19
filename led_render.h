@@ -135,9 +135,9 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	// FADE ALL ARRAYS / GRIDS
 	////////////////////////////////////////////////////////////////////////////
-	void fade() {
+	void fade(uint8_t amount = 0x80) {
 		for (int x=0; x<total(); x++) {
-			if (list[x]) list[x]->fade();
+			if (list[x]) list[x]->fade(amount);
 		}
 	}
 
