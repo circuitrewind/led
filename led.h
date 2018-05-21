@@ -10,18 +10,18 @@
 
 
 
-enum LED_COLOR {
-	LED_RGB,
-	LED_GRB,
-	LED_WRGB,
-	LED_WGRB,
+enum LED_MODE {
+	LED_RGB		= 0x01,
+	LED_GRB		= 0x02,
+	LED_WRGB	= 0x09,
+	LED_WGRB	= 0x0A,
 };
 
 
 enum LED_TYPE {
-	LED_BASIC,
-	LED_ARRAY,
-	LED_GRID,
+	LED_BASIC	= 0x10,
+	LED_ARRAY	= 0x20,
+	LED_GRID	= 0x30,
 };
 
 
@@ -36,11 +36,11 @@ class led {
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR - PASS IN THE PIN FOR THE LEDS, AS WELL AS THE LED COUNT
 	////////////////////////////////////////////////////////////////////////////
-	INLINE led(uint8_t led_pin, uint16_t led_total, uint8_t led_mode=LED_GRB) {
-		this->_pin		= led_pin;
-		this->_total	= led_total;
-		this->_mode		= led_mode;
-		this->_type		= LED_BASIC;
+	INLINE led(uint8_t led_pin, uint16_t led_total, LED_MODE led_mode=LED_GRB) {
+		_pin	= led_pin;
+		_total	= led_total;
+		_mode	= led_mode;
+		_type	= LED_BASIC;
 	}
 
 
@@ -81,13 +81,13 @@ class led {
 	// CLEAR THE ENTIRE PIXEL ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	void clear() {
-		this->begin();
+		begin();
 
-		for (uint16_t i=0; i<this->_total; i++) {
-			this->pixel(0, 0, 0);
+		for (uint16_t i=0; i<_total; i++) {
+			pixel(0, 0, 0);
 		}
 
-		this->end();
+		end();
 	}
 
 
@@ -98,7 +98,7 @@ class led {
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void begin() {
 		intr_disable();
-		pinMode(this->_pin, OUTPUT);
+		pinMode(_pin, OUTPUT);
 	}
 
 
@@ -108,9 +108,8 @@ class led {
 	// FINALIZE AND SHOW LED STRIP - CALL AT END OF RENDER LOOP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void end() {
-		digitalWrite(this->_pin, LOW);
+		digitalWrite(_pin, LOW);
 		intr_enable();
-		delay(1);	//TODO: git rid of this last delay!
 	}
 
 
@@ -120,7 +119,7 @@ class led {
 	// GET THE PIN USED FOR THIS LED STRIP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE uint8_t pin() const {
-		return this->_pin;
+		return _pin;
 	}
 
 
@@ -130,7 +129,7 @@ class led {
 	// GET THE NUMBER OF LEDS IN THIS STRIP
 	////////////////////////////////////////////////////////////////////////////
 	INLINE uint16_t total() const {
-		return this->_total;
+		return _total;
 	}
 
 
@@ -139,8 +138,8 @@ class led {
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE CURRENT LED STRIP MODE: RGB VS GRB DATA ORDER
 	////////////////////////////////////////////////////////////////////////////
-	INLINE uint8_t mode() const {
-		return this->_mode;
+	INLINE LED_MODE mode() const {
+		return _mode;
 	}
 
 
@@ -149,8 +148,10 @@ class led {
 	////////////////////////////////////////////////////////////////////////////
 	// SET THE CURRENT LED STRIP MODE: RGB VS GRB DATA ORDER
 	////////////////////////////////////////////////////////////////////////////
-	INLINE uint8_t mode(uint8_t led_mode) {
-		this->_mode = led_mode;
+	INLINE LED_MODE mode(LED_MODE led_mode) {
+		LED_MODE mode = _mode;
+		_mode = led_mode;
+		return mode;
 	}
 
 
@@ -160,7 +161,7 @@ class led {
 	// GET THE CURRENT LED RENDERING TYPE
 	////////////////////////////////////////////////////////////////////////////
 	INLINE LED_TYPE type() {
-		return this->_type;
+		return _type;
 	}
 
 
@@ -168,7 +169,7 @@ class led {
 
 	private:
 		uint8_t		_pin;
-		uint8_t		_mode;
+		LED_MODE	_mode;
 		uint16_t	_total;
 
 	protected:

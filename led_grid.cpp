@@ -15,7 +15,7 @@ color_t		led_grid::color_palette[GRID_MAX];
 
 #ifdef TEENSYDUINO
 void led_grid::show() {
-	this->begin();
+	begin();
 	for (int y=height()-1; y>=0; y--) {
 		uint16_t	row = layout[y];
 		uint16_t	set = y * width();
@@ -29,7 +29,7 @@ void led_grid::show() {
 			}
 		}
 	}
-	this->end();
+	end();
 }
 #endif //TEENSYDUINO
 
@@ -38,7 +38,7 @@ void led_grid::show() {
 
 #ifdef __AVR__
 void led_grid::show() {
-	this->begin();
+	begin();
 	for (int i=0; i<total(); i++) {
 		pixel(grid[i]);
 	}
@@ -57,7 +57,7 @@ void led_grid::show() {
 		}
 	}
 	*/
-	this->end();
+	end();
 }
 #endif //__AVR__
 

@@ -26,10 +26,12 @@ class led_grid : public led_array {
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	led_grid(uint8_t led_pin, uint16_t led_width, uint16_t led_height, uint32_t *mask=nullptr)
-		:	led_array(led_pin, led_width*led_height),
-			grid_width( led_width),
-			grid_height(led_height) {
+	led_grid(	uint8_t led_pin, uint16_t led_width, uint16_t led_height,
+				LED_MODE led_mode=LED_GRB, uint32_t *mask=nullptr)
+
+			:	led_array(led_pin, led_width*led_height, led_mode),
+				grid_width( led_width),
+				grid_height(led_height) {
 
 
 		//SET DEFAULT VALUES
