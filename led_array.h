@@ -180,6 +180,66 @@ class led_array : public led {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// RUN COLOR_T::ADD() ON ALL LEDS IN STRIP
+	////////////////////////////////////////////////////////////////////////////
+	INLINE void add(uint8_t x) { add(color_t(x, x, x)); }
+	INLINE void add(uint8_t r, uint8_t g, uint8_t b) { add(color_t(r, g, b)); }
+
+	INLINE void add(color_t color) {
+		for (auto i=0; i<total(); i++) {
+			_array[i].add(color);
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RUN COLOR_T::ADD() ON ALL LEDS IN STRIP
+	////////////////////////////////////////////////////////////////////////////
+	INLINE void sub(uint8_t x) { sub(color_t(x, x, x)); }
+	INLINE void sub(uint8_t r, uint8_t g, uint8_t b) { sub(color_t(r, g, b)); }
+
+	INLINE void sub(color_t color) {
+		for (auto i=0; i<total(); i++) {
+			_array[i].sub(color);
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RUN COLOR_T::SCREEN() ON ALL LEDS IN STRIP
+	////////////////////////////////////////////////////////////////////////////
+	INLINE void screen(uint8_t x) { screen(color_t(x, x, x)); }
+	INLINE void screen(uint8_t r, uint8_t g, uint8_t b) { screen(color_t(r, g, b)); }
+
+	INLINE void screen(color_t color) {
+		for (auto i=0; i<total(); i++) {
+			_array[i].screen(color);
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RUN COLOR_T::MULTIPLY() ON ALL LEDS IN STRIP
+	////////////////////////////////////////////////////////////////////////////
+	INLINE void multiply(uint8_t x) { multiply(color_t(x, x, x)); }
+	INLINE void multiply(uint8_t r, uint8_t g, uint8_t b) { multiply(color_t(r, g, b)); }
+
+	INLINE void multiply(color_t color) {
+		for (auto i=0; i<total(); i++) {
+			_array[i].multiply(color);
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//GET A POINTER TO THE RAW BINARY PIXEL DATA
 	////////////////////////////////////////////////////////////////////////////
 	INLINE color_t *pixels() const {
