@@ -43,8 +43,6 @@ void ICACHE_RAM_ATTR led::pixel(const color_t &color) {
 	uint32_t	start	= 0;
 	uint32_t	pause	= 0;
 
-	intr_disable();
-
 	for (int32_t i=23; i>=0; i--) {
 		pause = (data & (1<<i)) ? CYCLES_T1H : CYCLES_T0H;
 		start = esp_cycle();
@@ -55,12 +53,8 @@ void ICACHE_RAM_ATTR led::pixel(const color_t &color) {
 
 		//WRITE LOW VALUE AND PAUSE
 		GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, value);
-//		intr_enable();
 		while ((esp_cycle() - start) < CYCLES) {}
-//		intr_disable();
 	}
-
-	intr_enable();
 }
 
 
