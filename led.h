@@ -41,7 +41,17 @@ class led {
 		_total	= led_total;
 		_mode	= led_mode;
 		_type	= LED_BASIC;
+
+		clock();
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RE-CALCULATE THE CURRENT CLOCK SPEED AND DELAYS
+	////////////////////////////////////////////////////////////////////////////
+	void clock();
 
 
 
@@ -58,7 +68,7 @@ class led {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// ???
+	// DRAW A SINGLE PIXEL, SIMILAR TO ABOVE
 	////////////////////////////////////////////////////////////////////////////
 	INLINE void pixel(volatile const color_t &color) {
 		pixel(color_t(color));
@@ -171,6 +181,14 @@ class led {
 		uint8_t		_pin;
 		LED_MODE	_mode;
 		uint16_t	_total;
+
+
+#if defined(ARDUINO_ARCH_RP2040) || defined(ESP8266) || defined(ESP32)
+		uint32_t	CYCLES_T0H;
+		uint32_t	CYCLES_T1H;
+		uint32_t	CYCLES;
+#endif // defined(ARDUINO_ARCH_RP2040) || defined(ESP8266) || defined(ESP32)
+
 
 	protected:
 		LED_TYPE	_type;
