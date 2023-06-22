@@ -65,7 +65,7 @@ public:
 	////////////////////////////////////////////////////////////////////////////
 	bool remove(led_array *item) {
 		for (int i=0; i<total(); i++) {
-			if (list[i] == nullptr) {
+			if (list[i] == item) {
 				list[i] = nullptr;
 				return true;
 			}
